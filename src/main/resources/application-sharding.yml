@@ -1,0 +1,73 @@
+sharding:
+  jdbc:
+    datasource:
+      # 数据源
+      names: ds0,ds1,ds2
+      ds0:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.jdbc.Driver
+        url: jdbc:mysql://59.110.213.162:3339/shard0
+        username: root
+        password: 123456
+      ds1:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.jdbc.Driver
+        url: jdbc:mysql://59.110.213.162:3339/shard1
+        username: root
+        password: 123456
+      ds2:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.jdbc.Driver
+        url: jdbc:mysql://59.110.213.162:3339/shard2
+        username: root
+        password: 123456
+    config:
+      sharding:
+        # 默认数据源，不分库分表到达这个数据源
+        default-data-source-name: ds2
+        #【默认分库策略】对user_id取模
+        default-database-strategy:
+          inline:
+            sharding-column: dictionary_id
+            algorithm-expression: ds$->{dictionary_id % 2}
+        # 【分表策略】
+        tables:
+          # dictionary是广播表
+          dictionary:
+            key-generator-column-name: dictionary_id
+            actual-data-nodes: ds$->{0..1}.dictionary
+          # user【只分库不分表】
+          user:
+            key-generator-column-name: user_id
+            actual-data-nodes: ds$->{0..1}.user
+            database-strategy:
+              #行内表达式
+              inline:
+                algorithm-expression: ds$->{user_id % 2}
+                shardingColumn: user_id
+              #标准表达式
+#              standard:
+#                shardingColumn: user_id
+#                preciseAlgorithmClassName: com.gupaoedu.config.DBShardAlgo
+          # order【只分表不分库】
+          order:
+            key-generator-column-name: order_id
+            actual-data-nodes: ds$->{0..1}.order$->{0..1}
+            table-strategy:
+              inline:
+                sharding-column: order_id
+                algorithm-expression: order$->{order_id%2}
+          # order_item【即分库，又分表】
+          order_item:
+            key-generator-column-name: order_item_id
+            actual-data-nodes: ds$->{0..1}.order_item$->{0..1}
+            database-strategy:
+              inline:
+                algorithm-expression: ds$->{order_id % 2}
+                shardingColumn: order_id
+            table-strategy:
+              inline:
+                sharding-column: order_id
+                algorithm-expression: order_item$->{order_id%2}
+      props:
+        sql.show: true
