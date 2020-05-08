@@ -2,8 +2,6 @@ package com.xialuo.shardingjdbcfkfb.service;
 
 import com.xialuo.shardingjdbcfkfb.dao.UserDao;
 import com.xialuo.shardingjdbcfkfb.entity.User;
-import io.shardingsphere.transaction.annotation.ShardingTransactionType;
-import io.shardingsphere.transaction.api.TransactionType;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,16 +33,16 @@ public class UserService {
   /**
    * 测试跨库事务
    */
-  @ShardingTransactionType(TransactionType.XA)
+  //@ShardingTransactionType(TransactionType.XA)
   @Transactional(rollbackFor = Exception.class,propagation = Propagation.REQUIRED)
   public void testTransactional() {
-    User user1 = new User(12673, "青山", 12);
+    User user1 = new User(12673, "1111", 12);
     this.userDao.addOne(user1);
     //另一个事务
     user1Service.test1Transactional();
 
     // 主键冲突
-    User user2 = new User(12675, "青山", 12);
+    User user2 = new User(12673, "1111", 12);
     this.userDao.addOne(user2);
   }
 

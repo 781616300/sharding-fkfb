@@ -11,5 +11,7 @@ public interface OrderItemDao {
 
   List<OrderItem> getOrderItemByPrice(int price);
 
+  List<OrderItem> getOrderItemByOrderId(int id);
+
 
 }

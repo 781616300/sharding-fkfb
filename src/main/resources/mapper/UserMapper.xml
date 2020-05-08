@@ -17,5 +17,8 @@
     <select id="getOneById" resultType="user">
         select * from user where user_id=#{id}
     </select>
+    <select id="getByAge" resultType="user">
+        select * from user where age=#{age}
+    </select>
 
 </mapper>

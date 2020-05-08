@@ -13,5 +13,8 @@
     <select id="getOrderItemByPrice" resultType="orderItem">
         select a.* from order_item a inner join order b on a.order_id = b.order_id where b.total_price=#{price}
     </select>
+    <select id="getOrderItemByOrderId" resultType="orderItem">
+        select a.* from order_item a inner join order b on a.order_id = b.order_id where b.order_id=#{id}
+    </select>
 
 </mapper>

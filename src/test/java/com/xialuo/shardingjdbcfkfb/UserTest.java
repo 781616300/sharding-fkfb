@@ -1,8 +1,11 @@
 package com.xialuo.shardingjdbcfkfb;
 
+import com.xialuo.shardingjdbcfkfb.config.JacksonUtils;
 import com.xialuo.shardingjdbcfkfb.dao.UserDao;
 import com.xialuo.shardingjdbcfkfb.entity.User;
 import com.xialuo.shardingjdbcfkfb.service.UserService;
+import io.shardingsphere.api.HintManager;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,6 +34,12 @@ public class UserTest {
             this.userDao.addOne(user);
             log.info("插入用户id：{}", user.getUserId());
         }
+    }
+    @Test
+    public void get() throws Exception {
+        HintManager hintManager = HintManager.getInstance();
+        List<User> list = userDao.getByAge(1);
+        log.info("查询用户：{}", JacksonUtils.bean2Json(list));
     }
 }
 

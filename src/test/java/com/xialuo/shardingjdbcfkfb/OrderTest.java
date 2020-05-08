@@ -95,5 +95,16 @@ public class OrderTest {
         List<OrderItem> orderItems = this.orderItemDao.getOrderItemByPrice(333);
         log.info("查询到结果为：{}", Arrays.toString(orderItems.toArray()));
     }
+
+    /**
+     * 关联查询
+     * 使用分片键，不会产生笛卡尔积查询
+     */
+    @Test
+    public void selectOrder() {
+        List<OrderItem> orderItems = this.orderItemDao.getOrderItemByOrderId(1);
+        log.info("查询到结果为：{}", Arrays.toString(orderItems.toArray()));
+    }
+
 }
 

@@ -49,7 +49,7 @@ sharding:
 #              standard:
 #                shardingColumn: user_id
 #                preciseAlgorithmClassName: com.gupaoedu.config.DBShardAlgo
-          # order【只分表不分库】
+          # order【只分表不分库】---------
           order:
             key-generator-column-name: order_id
             actual-data-nodes: ds$->{0..1}.order$->{0..1}
@@ -57,7 +57,7 @@ sharding:
               inline:
                 sharding-column: order_id
                 algorithm-expression: order$->{order_id%2}
-          # order_item【即分库，又分表】
+          # order_item【即分库，又分表】-----------
           order_item:
             key-generator-column-name: order_item_id
             actual-data-nodes: ds$->{0..1}.order_item$->{0..1}
@@ -69,5 +69,29 @@ sharding:
               inline:
                 sharding-column: order_id
                 algorithm-expression: order_item$->{order_id%2}
+          #绑定表
+#          order:
+#            key-generator-column-name: order_id
+#            actual-data-nodes: ds$->{0..1}.order$->{0..1}
+#            database-strategy:
+#              inline:
+#                algorithm-expression: ds$->{order_id % 2}
+#                shardingColumn: order_id
+#            table-strategy:
+#              inline:
+#                sharding-column: order_id
+#                algorithm-expression: order$->{order_id%2}
+#          order_item:
+#            key-generator-column-name: order_item_id
+#            actual-data-nodes: ds$->{0..1}.order_item$->{0..1}
+#            database-strategy:
+#              inline:
+#                algorithm-expression: ds$->{order_id % 2}
+#                shardingColumn: order_id
+#            table-strategy:
+#              inline:
+#                sharding-column: order_id
+#                algorithm-expression: order_item$->{order_id%2}
+#        binding-tables: order,order_item
       props:
         sql.show: true
